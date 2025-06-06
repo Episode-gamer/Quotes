@@ -1,13 +1,115 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  
-<link rel="stylesheet" href="style.css">
-  
-</head>
-<body>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylish Quote Box with Buttons</title>
+    <!-- Importing Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Importing the Inter font from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Applying the Inter font to the whole page */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
 
-  
+        /* Custom styles for the quote marks */
+        .quote-text::before {
+            content: '“';
+            font-size: 3rem; /* 48px */
+            font-weight: 700;
+            color: #e5e7eb; /* gray-200 */
+            position: absolute;
+            top: -1.5rem; /* -24px */
+            left: -0.5rem; /* -8px */
+            line-height: 1;
+            z-index: 0;
+        }
+        
+        /* Ensure quote text is above the pseudo-element */
+        .quote-text {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <!-- The main container for the quote box -->
+    <div class="max-w-md md:max-w-lg mx-4 p-8 bg-white rounded-xl shadow-lg">
+        <!-- The blockquote element is semantically correct for quotes -->
+        <blockquote class="relative">
+            <!-- The main text of the quote -->
+            <p class="text-lg md:text-xl font-medium text-gray-800 quote-text">
+                The only way to do great work is to love what you do. If you haven't found it yet, keep looking. Don't settle.
+            </p>
+            <!-- The author of the quote -->
+            <footer class="mt-6">
+                <p class="text-base font-bold text-indigo-600">— Steve Jobs</p>
+                <p class="text-sm text-gray-500">Co-founder of Apple Inc.</p>
+            </footer>
+        </blockquote>
+        
+        <!-- Container for the action buttons -->
+        <div class="mt-8 flex justify-end space-x-4">
+            <!-- Copy Quote Button -->
+            <button id="copy-btn" class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                Copy Quote
+            </button>
+            <!-- Website Link Button -->
+            <a href="https://reza.com/" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-gray-200 text-gray-800 text-sm font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition-colors duration-200">
+                Visit Website
+            </a>
+        </div>
+    </div>
+
+    <!-- JavaScript for the copy functionality -->
+    <script>
+        // Select the button by its ID
+        const copyButton = document.getElementById('copy-btn');
+
+        // Add a click event listener to the button
+        copyButton.addEventListener('click', () => {
+            // Find the quote and author elements
+            const quoteElement = document.querySelector('.quote-text');
+            const authorElement = document.querySelector('footer p:first-child');
+            
+            // Combine the quote and author text for copying
+            const fullQuote = `"${quoteElement.innerText}" ${authorElement.innerText}`;
+
+            // Create a temporary textarea element to hold the text. This is a reliable method for copying to the clipboard.
+            const textArea = document.createElement('textarea');
+            textArea.value = fullQuote;
+
+            // Make the textarea invisible
+            textArea.style.position = 'fixed';
+            textArea.style.top = '-9999px';
+            textArea.style.left = '-9999px';
+
+            document.body.appendChild(textArea);
+            textArea.select();
+
+            try {
+                // Execute the copy command
+                document.execCommand('copy');
+                
+                // Provide visual feedback to the user
+                copyButton.innerText = 'Copied!';
+                setTimeout(() => {
+                    copyButton.innerText = 'Copy Quote';
+                }, 2000); // Revert the button text after 2 seconds
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+                copyButton.innerText = 'Error'; // Show an error message on the button
+            }
+
+            // Clean up by removing the temporary textarea
+            document.body.removeChild(textArea);
+        });
+    </script>
 
 </body>
 </html>
