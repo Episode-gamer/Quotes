@@ -14,6 +14,7 @@
         /* Applying the Inter font to the whole page */
         body {
             font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
         }
 
         /* Custom styles for the quote marks on each box */
@@ -34,7 +35,7 @@
             position: relative;
             z-index: 1;
         }
-        
+
         /* Smooth transition for highlighting */
         .quote-box {
             transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
@@ -149,6 +150,7 @@
                 shareButton.className = 'px-3 py-1 bg-gray-200 text-gray-700 text-xs font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition-colors duration-200';
                 shareButton.innerText = 'Share';
                 shareButton.addEventListener('click', () => {
+                    // Create a short link using the element's ID
                     const linkToQuote = `${window.location.href.split('#')[0]}#quote-${index}`;
                     copyToClipboard(shareButton, linkToQuote, 'Link Copied!', 'Share');
                 });
@@ -166,14 +168,14 @@
                 websiteLink.target = '_blank';
                 websiteLink.rel = 'noopener noreferrer';
                 websiteLink.className = 'px-3 py-1 bg-indigo-600 text-white text-xs font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200';
-                websiteLink.innerText = 'Visit Quote\'s source';
+                websiteLink.innerText = 'Visit Website';
                 
                 footer.appendChild(authorP);
                 footer.appendChild(sourceP);
                 blockquote.appendChild(p);
                 blockquote.appendChild(footer);
                 quoteContent.appendChild(blockquote);
-                buttonDiv.appendChild(shareButton); // Add Share button
+                buttonDiv.appendChild(shareButton);
                 buttonDiv.appendChild(copyButton);
                 buttonDiv.appendChild(websiteLink);
                 quoteContent.appendChild(buttonDiv);
@@ -189,13 +191,11 @@
                 const elementId = window.location.hash.substring(1);
                 const element = document.getElementById(elementId);
                 if (element) {
-                    // Scroll the element into the center of the view
                     element.scrollIntoView({
                         behavior: 'smooth',
                         block: 'center'
                     });
                     
-                    // Add a highlight class and remove it after a few seconds
                     element.classList.add('highlight');
                     setTimeout(() => {
                         element.classList.remove('highlight');
@@ -205,11 +205,9 @@
         }
 
         // --- SCRIPT EXECUTION ---
-
-        // When the page content is fully loaded...
         document.addEventListener('DOMContentLoaded', () => {
-            displayAllQuotes(); // First, create all the quote boxes
-            handleLinking();  // Then, check if we need to link to a specific one
+            displayAllQuotes();
+            handleLinking();
         });
 
     </script>
