@@ -35,16 +35,16 @@
             position: relative;
             z-index: 1;
         }
-
-        /* Smooth transition for highlighting */
-        .quote-box {
-            transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
-        }
         
-        /* Highlight style for linked quote */
-        .highlight {
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.6); /* Equivalent to ring-indigo-500 with opacity */
-            transform: scale(1.01);
+        /* New class for highlighting specific text */
+        .text-highlight {
+            background-color: #fed7aa; /* Tailwind orange-200 */
+            border-radius: 4px;
+            padding: 2px 4px;
+            /* Ensures highlight looks good across multiple lines */
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+            transition: background-color 0.3s ease-in-out;
         }
     </style>
 </head>
@@ -118,9 +118,9 @@
             quotesContainer.innerHTML = ''; 
             quotes.forEach((quote, index) => {
                 const quoteBox = document.createElement('div');
-                // Add a unique ID to each quote box for linking
-                quoteBox.id = `quote-${index}`;
-                quoteBox.className = 'relative p-8 bg-white rounded-xl shadow-lg quote-box';
+                // Add a unique, short ID to each quote box for linking (e.g., "q1", "q2")
+                quoteBox.id = `q${index + 1}`;
+                quoteBox.className = 'relative p-8 bg-white rounded-xl shadow-lg';
 
                 const quoteContent = document.createElement('div');
                 quoteContent.className = 'quote-content';
@@ -128,14 +128,16 @@
                 const blockquote = document.createElement('blockquote');
                 
                 const p = document.createElement('p');
-                p.className = 'text-lg md:text-xl font-medium text-gray-800';
+                // Added a specific class to target the quote text
+                p.className = 'text-lg md:text-xl font-medium text-gray-800 quote-text-p';
                 p.innerText = quote.text;
                 
                 const footer = document.createElement('footer');
                 footer.className = 'mt-6';
                 
                 const authorP = document.createElement('p');
-                authorP.className = 'text-base font-bold text-indigo-600';
+                // Added a specific class to target the author text
+                authorP.className = 'text-base font-bold text-indigo-600 quote-author-p';
                 authorP.innerText = quote.author;
 
                 const sourceP = document.createElement('p');
@@ -145,13 +147,11 @@
                 const buttonDiv = document.createElement('div');
                 buttonDiv.className = 'mt-6 flex justify-end items-center space-x-3';
 
-                // Share button to copy the direct link to this quote
                 const shareButton = document.createElement('button');
                 shareButton.className = 'px-3 py-1 bg-gray-200 text-gray-700 text-xs font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition-colors duration-200';
                 shareButton.innerText = 'Share';
                 shareButton.addEventListener('click', () => {
-                    // Create a short link using the element's ID
-                    const linkToQuote = `${window.location.href.split('#')[0]}#quote-${index}`;
+                    const linkToQuote = `${window.location.href.split('#')[0]}#q${index + 1}`;
                     copyToClipboard(shareButton, linkToQuote, 'Link Copied!', 'Share');
                 });
 
@@ -196,10 +196,21 @@
                         block: 'center'
                     });
                     
-                    element.classList.add('highlight');
-                    setTimeout(() => {
-                        element.classList.remove('highlight');
-                    }, 3000); // Highlight lasts for 3 seconds
+                    // Find the text and author elements to highlight
+                    const textEl = element.querySelector('.quote-text-p');
+                    const authorEl = element.querySelector('.quote-author-p');
+
+                    if (textEl && authorEl) {
+                        // Add the highlight class
+                        textEl.classList.add('text-highlight');
+                        authorEl.classList.add('text-highlight');
+                        
+                        // Remove the highlight class after 3 seconds
+                        setTimeout(() => {
+                            textEl.classList.remove('text-highlight');
+                            authorEl.classList.remove('text-highlight');
+                        }, 3000); 
+                    }
                 }
             }
         }
@@ -207,9 +218,6 @@
         // --- SCRIPT EXECUTION ---
         document.addEventListener('DOMContentLoaded', () => {
             displayAllQuotes();
-            // We use a small timeout to ensure the browser has painted the new quote elements
-            // before we try to scroll to one. This fixes a timing issue where the highlight
-            // might not appear if the script runs too quickly.
             setTimeout(handleLinking, 100);
         });
 
