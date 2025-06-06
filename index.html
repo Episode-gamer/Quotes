@@ -45,32 +45,37 @@
 
     <!-- JavaScript for generating the quote list -->
     <script>
-        // --- DATA: An array of quote objects ---
+        // --- DATA: An array of quote objects with unique links ---
         const quotes = [
             {
                 text: "The only way to do great work is to love what you do. If you haven't found it yet, keep looking. Don't settle.",
                 author: "— Steve Jobs",
-                source: "Co-founder of Apple Inc."
+                source: "Co-founder of Apple Inc.",
+                link: "https://www.apple.com"
             },
             {
                 text: "The future belongs to those who believe in the beauty of their dreams.",
                 author: "— Eleanor Roosevelt",
-                source: "Former First Lady of the United States"
+                source: "Former First Lady of the United States",
+                link: "https://www.rooseveltinstitute.org/"
             },
             {
                 text: "It is during our darkest moments that we must focus to see the light.",
                 author: "— Aristotle",
-                source: "Greek Philosopher"
+                source: "Greek Philosopher",
+                link: "https://www.britannica.com/biography/Aristotle"
             },
             {
                 text: "Be the change that you wish to see in the world.",
                 author: "— Mahatma Gandhi",
-                source: "Indian Lawyer & Anti-colonial Nationalist"
+                source: "Indian Lawyer & Anti-colonial Nationalist",
+                link: "https://www.gandhiheritageportal.org/"
             },
             {
                 text: "If you want to live a happy life, tie it to a goal, not to people or things.",
                 author: "— Albert Einstein",
-                source: "Theoretical Physicist"
+                source: "Theoretical Physicist",
+                link: "https://www.nobelprize.org/prizes/physics/1921/einstein/biographical/"
             }
         ];
 
@@ -124,11 +129,9 @@
                 sourceP.className = 'text-sm text-gray-500';
                 sourceP.innerText = quote.source;
 
-                // Create the button container with spacing between buttons
                 const buttonDiv = document.createElement('div');
                 buttonDiv.className = 'mt-6 flex justify-end space-x-3';
 
-                // Create the copy button for this specific quote
                 const copyButton = document.createElement('button');
                 copyButton.className = 'px-3 py-1 bg-gray-200 text-gray-700 text-xs font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition-colors duration-200';
                 copyButton.innerText = 'Copy';
@@ -136,22 +139,21 @@
                     copyQuote(copyButton, quote.text, quote.author);
                 });
 
-                // Create the website link for this specific quote
+                // Create the website link using the unique URL from the data
                 const websiteLink = document.createElement('a');
-                websiteLink.href = 'https://reza.com/';
+                websiteLink.href = quote.link; // Use the specific link for this quote
                 websiteLink.target = '_blank';
                 websiteLink.rel = 'noopener noreferrer';
                 websiteLink.className = 'px-3 py-1 bg-indigo-600 text-white text-xs font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200';
-                websiteLink.innerText = 'View Quote\'s source';
+                websiteLink.innerText = 'Visit Quote\'s source';
                 
-                // Assemble the elements
                 footer.appendChild(authorP);
                 footer.appendChild(sourceP);
                 blockquote.appendChild(p);
                 blockquote.appendChild(footer);
                 quoteContent.appendChild(blockquote);
-                buttonDiv.appendChild(copyButton); // Add copy button
-                buttonDiv.appendChild(websiteLink); // Add website link
+                buttonDiv.appendChild(copyButton);
+                buttonDiv.appendChild(websiteLink);
                 quoteContent.appendChild(buttonDiv);
                 quoteBox.appendChild(quoteContent);
                 
